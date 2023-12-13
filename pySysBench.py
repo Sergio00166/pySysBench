@@ -11,11 +11,6 @@ from multiprocessing import cpu_count, Process, Pool
 from time import time
 from time import sleep as delay
 
-def color(arg, arg2):
-    if arg2=="B": return "[34m[1m"+arg+"[0m"
-    elif arg2=="bW": return "[46m[1m"+arg+"[0m"
-    elif arg2=="G": return "[32m[1m"+arg+"[0m"
-
 def generate_random_point():
     vertices = [(0, 0), (1, 0), (0.5, 0.866)]
     vertex = random.choice(vertices)
@@ -58,22 +53,21 @@ def all_cores(): return int(1/run(cpu_count(), 16384)*100000*0.7)
 
 def main():
     delay(0.5); print(""); prog=""; percent=0
-    print("     "+color(" Python SysBench v3.0 ","bW"),end="\n\n")
+    print("      Python SysBench v3.0 ",end="\n\n")
     print("\r  Running Single-Core benchmark... ",end="")
     onec=str(one_core())
-    print(color("DONE","B"),end="")
+    print("DONE",end="")
     delay(1)
     print("\r"+" "*64,end="")
     print("\r  Running Multi-Core benchmark... ",end="")
     allc=str(all_cores())
-    print(color("DONE","B"),end="")
+    print("DONE",end="")
     delay(1)
     print("\r"+" "*64,end="")
     print("\r      Printing results... ",end="")
     delay(1.5)
-    print(color("\r   Single-Core performance: ","B")+color(onec,"G")
-          +"                                          ")
-    print(color("   Multi-Core  performance: ","B")+color(allc,"G"))
+    print("\r   Single-Core performance: "+onec+" "*42)
+    print("   Multi-Core  performance: "+allc)
     print("")
 
 if __name__=="__main__": main()

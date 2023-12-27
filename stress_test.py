@@ -2,7 +2,7 @@
 
 """
 PYTHON CPU STRESS TEST
-based on the sierpinsk fractan
+based on the sierpinsk fractal
 using the chaos method
 """
 

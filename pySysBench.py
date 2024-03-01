@@ -89,6 +89,6 @@ if __name__=="__main__":
         if arg=="stress":
             main.stress()
         elif arg=="bench":
-            main.benchmark
+            main.benchmark()
         else: print("\n   BAD ARGUMENT\n")
     else: main.benchmark()

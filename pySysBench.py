@@ -13,6 +13,8 @@ from time import sleep as delay
 from sys import argv
 
 class worker:
+    
+    @staticmethod
     def generate_random_point():
         vertices = [(0, 0), (1, 0), (0.5, 0.866)]
         vertex = random.choice(vertices)
@@ -24,14 +26,16 @@ class worker:
         point_x = vertex[0] * (1 - r1 - r2) + vertices[(vertices.index(vertex) + 1) % 3][0] * r1 + vertices[(vertices.index(vertex) + 2) % 3][0] * r2
         point_y = vertex[1] * (1 - r1 - r2) + vertices[(vertices.index(vertex) + 1) % 3][1] * r1 + vertices[(vertices.index(vertex) + 2) % 3][1] * r2
         return point_x, point_y
-
+    
+    @staticmethod
     def generate_additional_points(initial_point, range):
         for _ in range:
             random_vertex = random.choice([(0, 0), (1, 0), (0.5, 0.866)])
             new_point_x = (initial_point[0] + random_vertex[0]) / 2
             new_point_y = (initial_point[1] + random_vertex[1]) / 2
             initial_point = (new_point_x, new_point_y)
-
+            
+    @staticmethod
     def generate_parallel_points(num_processes, num_additional_points):
         initial_points = [worker.generate_random_point() for _ in range(num_processes)]
         processes = []
@@ -44,16 +48,19 @@ class worker:
         for process in processes: process.join()
         end=time(); return end-start
 
-class starter:   
+class starter:
+    @staticmethod
     def benchmark(cores, sizef):
         global size, start ; size=sizef
         points=int((size*size)/cores)
         return worker.generate_parallel_points(cores, range(points))
+    @staticmethod
     def stress():
         initial_point=worker.generate_random_point()
         worker.generate_additional_points(initial_point, iter(int,1))
 
 class main:
+    @staticmethod
     def benchmark():
         run=starter.benchmark
         delay(0.5); print(""); prog=""; percent=0
@@ -71,6 +78,7 @@ class main:
         print("\r   Single-Core performance: "+onec+" "*42)
         print("   Multi-Core  performance: "+allc+"\n")
 
+    @staticmethod
     def stress():
         proc=[]
         print("\n   PYTHON BASED CPU STRESS-TEST\n")

@@ -1,18 +1,14 @@
-#Code by Sergio1260
-
-"""
-Python CPU benchmark (Single core + Multicore)
-No dependencys (Python3)
-Based on the Sierpinks Fractal's Chaos rendering method
-"""
-
+from extra import main as bench
+from sys import argv
+from time import sleep as delay
+from multiprocessing import cpu_count
 import random
 from multiprocessing import cpu_count, Process, Pool
 from time import time
-from time import sleep as delay
 from sys import argv
 
-class worker:
+
+class stress:
     
     @staticmethod
     def generate_random_point():
@@ -37,66 +33,60 @@ class worker:
             
     @staticmethod
     def generate_parallel_points(num_processes, num_additional_points):
-        initial_points = [worker.generate_random_point() for _ in range(num_processes)]
+        initial_points = [stress.generate_random_point() for _ in range(num_processes)]
         processes = []
         for i in range(num_processes):
             initial_point = initial_points[i]
-            process = Process(target=worker.generate_additional_points, args=(initial_point, num_additional_points))
+            process = Process(target=stress.generate_additional_points, args=(initial_point, num_additional_points))
             process.start()
             processes.append(process)
         start=time()
         for process in processes: process.join()
         end=time(); return end-start
 
-class starter:
     @staticmethod
-    def benchmark(cores, sizef):
-        global size, start ; size=sizef
-        points=int((size*size)/cores)
-        return worker.generate_parallel_points(cores, range(points))
+    def worker():
+        initial_point=stress.generate_random_point()
+        stress.generate_additional_points(initial_point, iter(int,1))
+        
     @staticmethod
-    def stress():
-        initial_point=worker.generate_random_point()
-        worker.generate_additional_points(initial_point, iter(int,1))
-
-class main:
-    @staticmethod
-    def benchmark():
-        run=starter.benchmark
-        delay(0.5); print(""); prog=""; percent=0
-        print("      Python SysBench v3.0 ",end="\n\n")
-        print("\r  Running Single-Core benchmark... ",end="")
-        onec=str(int(1/(run(1, 5120)*13)*100000*0.7))
-        print("DONE",end="");  delay(1)
-        print("\r"+" "*64,end="")
-        print("\r  Running Multi-Core benchmark... ",end="")
-        allc=str(int(1/run(cpu_count(), 16384)*100000*0.7))
-        print("DONE",end="")
-        delay(1)
-        print("\r"+" "*64+"\r      Printing results... ",end="")
-        delay(1.5)
-        print("\r   Single-Core performance: "+onec+" "*42)
-        print("   Multi-Core  performance: "+allc+"\n")
-
-    @staticmethod
-    def stress():
+    def main():
         proc=[]
         print("\n   PYTHON BASED CPU STRESS-TEST\n")
         delay(0.33)
         print("STARTING...",end="\r")
         for _ in range(cpu_count()):
-            proc.append(Process(target=starter.stress))
+            proc.append(Process(target=stress.worker))
         for x in proc: x.start()
         delay(2)
         input("RUNNING. Press any key to stop . . .  ")
         for x in proc: x.terminate()
 
+
+
+def benchmark():
+    delay(0.5); print(""); prog=""; percent=0
+    print("      Python SysBench v4.0 ",end="\n\n")
+    print("\r  Running Single-Core benchmark... ",end="")
+    onec=str(bench(True,1))
+    print("DONE",end="");  delay(1)
+    print("\r"+" "*64,end="")
+    print("\r  Running Multi-Core benchmark... ",end="")
+    allc=str(bench(True,cpu_count()))
+    print("DONE",end="")
+    delay(0.5)
+    print("\r"+" "*64+"\r      Printing results... ",end="")
+    delay(1)
+    print("\r   Single-Core performance: "+onec+" "*42)
+    print("\r   Multi-Core  performance: "+allc+"\n")
+    
+
 if __name__=="__main__":
     if not len(argv)==1:
         arg=argv[1]
         if arg=="stress":
-            main.stress()
+            stress.main()
         elif arg=="bench":
-            main.benchmark()
+            benchmark()
         else: print("\n   BAD ARGUMENT\n")
-    else: main.benchmark()
+    else: benchmark()

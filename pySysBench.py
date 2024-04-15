@@ -72,7 +72,7 @@ def benchmark():
     print("DONE",end="");  delay(1)
     print("\r"+" "*64,end="")
     print("\r  Running Multi-Core benchmark... ",end="")
-    allc=int(bench(True,cpu_count())*1.1)
+    allc=int(bench(True,cpu_count()))
     print("DONE",end="")
     delay(0.5)
     print("\r"+" "*64+"\r      Printing results... ",end="")

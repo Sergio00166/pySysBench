@@ -91,7 +91,7 @@ def main(bench,proc):
             elapsed+=time()-start
             if elapsed>30:
                 pool.close()
-                return passes/elapsed*1000
+                return passes/elapsed*10000
     
     else: buffer=pool.map_async(worker,data).get()
 

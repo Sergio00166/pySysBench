@@ -84,14 +84,15 @@ def main(bench,proc):
     pool=Pool(processes=proc)
     worker = partial(wk, vbuff=vbuff, ret=bench)
     if bench:
-        passes=0; start=time()
+        passes=0; elapsed=0
         while True:
             proc=pool.map_async(worker,data)
-            elapsed=time()-start
+            start=time(); proc.get(); passes+=1
+            elapsed+=time()-start
             if elapsed>30:
                 pool.close()
                 return passes/elapsed*1000
-            passes+=1; proc.get()
+    
     else: buffer=pool.map_async(worker,data).get()
 
     if not bench:

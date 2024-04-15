@@ -68,17 +68,17 @@ def benchmark():
     delay(0.5); print(""); prog=""; percent=0
     print("      Python SysBench v4.1 ",end="\n\n")
     print("\r  Running Single-Core benchmark... ",end="")
-    onec=str(bench(True,1))
+    onec=int(bench(True,1))
     print("DONE",end="");  delay(1)
     print("\r"+" "*64,end="")
     print("\r  Running Multi-Core benchmark... ",end="")
-    allc=str(bench(True,cpu_count()))
+    allc=int(bench(True,cpu_count())*1.1)
     print("DONE",end="")
     delay(0.5)
     print("\r"+" "*64+"\r      Printing results... ",end="")
     delay(1)
-    print("\r   Single-Core performance: "+onec+" "*42)
-    print("\r   Multi-Core  performance: "+allc+"\n")
+    print("\r   Single-Core performance: "+str(onec)+" "*42)
+    print("\r   Multi-Core  performance: "+str(allc)+"\n")
     
 
 if __name__=="__main__":

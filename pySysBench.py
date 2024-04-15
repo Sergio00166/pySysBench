@@ -66,7 +66,7 @@ class stress:
 
 def benchmark():
     delay(0.5); print(""); prog=""; percent=0
-    print("      Python SysBench v4.0 ",end="\n\n")
+    print("      Python SysBench v4.1 ",end="\n\n")
     print("\r  Running Single-Core benchmark... ",end="")
     onec=str(bench(True,1))
     print("DONE",end="");  delay(1)

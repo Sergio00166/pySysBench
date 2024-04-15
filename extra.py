@@ -6,7 +6,6 @@ from multiprocessing import Pool, cpu_count
 from functools import partial
 from time import time
 
-# Coordenadas del cubo
 cube =\
 [
     [[0, 192], [16, 192]],
@@ -20,11 +19,9 @@ margin =\
     [[0,0], [512,0]],
     [[0,0], [0,384]],
     [[512,0], [512,384]],
-    [[0,384], [512,384]]
-    
+    [[0,384], [512,384]]    
 ]
 
-# Coordenadas de los vértices
 vertex0 = [[[0, 197], [16, 197]]]
 vertex1 = [[[0, 202], [16, 192]]]
 vertex2 = [[[8, 192], [8, 202]]]
@@ -50,10 +47,8 @@ def refresh(vbuff,time=0,dump=False):
     else: return screen
 
 def mid_points(vertex):
-    x1, y1 = vertex[0]
-    x2, y2 = vertex[1]
-    distance_x = x2 - x1
-    distance_y = y2 - y1
+    x1, y1 = vertex[0]; x2, y2 = vertex[1]
+    distance_x = x2-x1; distance_y = y2-y1
     num_points = max(abs(distance_x), abs(distance_y))
     step_x = distance_x / num_points
     step_y = distance_y / num_points
@@ -73,7 +68,7 @@ def wk(x,vbuff,ret):
     if not ret: return refresh(vbuff,dump=True)
 
 def main(bench,proc):
-    vbuff = init_scr(512, 384)  # Resolución de la pantalla
+    vbuff = init_scr(512, 384)
     vbuff=raster(margin,vbuff)
     blank=deepcopy(vbuff)
     x = 0; speed = 1
@@ -86,21 +81,21 @@ def main(bench,proc):
             speed = 1
             if cont>0: break
         x += speed
-    
     pool=Pool(processes=proc)
     worker = partial(wk, vbuff=vbuff, ret=bench)
     if bench:
         passes=0; start=time()
         while True:
-            elapsed=time()-start
-            if elapsed>30: return passes/elapsed*1000
             proc=pool.map_async(worker,data)
-            proc.get(); passes+=1
-    else:
-        buffer=pool.map_async(worker,data)
-        buffer=buffer.get()
+            elapsed=time()-start
+            if elapsed>30:
+                pool.close()
+                return passes/elapsed*1000
+            passes+=1; proc.get()
+    else: buffer=pool.map_async(worker,data).get()
 
     if not bench:
+        pool.close()
         while True:
             for x in buffer: print(x,flush=True)
                 
